@@ -15,5 +15,3 @@ RUN npm --version
 RUN cargo install --locked trunk
 RUN rustup target add wasm32-unknown-unknown
 RUN cargo install cargo-watch
-
-RUN cd app/frontend && npm install

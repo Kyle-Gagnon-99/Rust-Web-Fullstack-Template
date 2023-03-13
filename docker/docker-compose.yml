@@ -9,7 +9,7 @@ services:
       - rust-src:/app
     build:
       dockerfile: ../docker/Dockerfile.yew
-    command: bash -c "cd app/frontend && trunk serve"
+    command: bash -c "cd app/frontend && npm install && trunk serve"
     ports:
       - 8080:8080
 
