@@ -1,0 +1,5 @@
+# Rust targets
+target/
+
+# VSCode
+.vscode/

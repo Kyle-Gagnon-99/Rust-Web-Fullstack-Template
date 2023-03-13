@@ -1,0 +1,7 @@
+# frontend specific ignores
+
+# Yew
+dist/
+
+# NPM Modules
+node_modules/

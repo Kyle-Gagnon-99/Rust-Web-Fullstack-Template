@@ -1,0 +1,68 @@
+version: '3.8'
+name: rust-fullstack
+services:
+  frontend:
+    container_name: frontend-service
+    environment:
+      - CARGO_HTTP_MULTIPLEXING=false
+    volumes:
+      - rust-src:/app
+    build:
+      dockerfile: ../docker/Dockerfile.yew
+    command: bash -c "cd app/frontend && trunk serve"
+    ports:
+      - 8080:8080
+
+  backend:
+    container_name: backend-service
+    environment:
+      - CARGO_HTTP_MULTIPLEXING=false
+    volumes:
+      - rust-src:/app
+    build:
+      dockerfile: ../docker/Dockerfile.rocket
+    command: bash -c "cd app/backend && cargo watch -x run"
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+
+  db:
+    container_name: postgres-db
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=defaultDb
+    ports:
+      - 5433:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4:latest
+    restart: always
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
+      - PGADMIN_DEFAULT_PASSWORD=secret
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - 5050:5050
+    logging:
+      driver: "none"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+
+volumes:
+  rust-src:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ../
+  db:
+    driver: local
+  pgadmin-data:
